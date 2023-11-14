@@ -1,25 +1,31 @@
 package com.uce.edu;
 
+import java.math.BigDecimal;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.uce.edu.ioc.di.Estudiante;
+
 @SpringBootApplication
 public class Pa2U1P5FfApplication implements CommandLineRunner {
 
+	@Autowired
+	private Estudiante estudiante;
+	
 	public static void main(String[] args) {
 		SpringApplication.run(Pa2U1P5FfApplication.class, args);
 	}
 
 	@Override
 	public void run(String... args) throws Exception {
-		// TODO Auto-generated method stub
-		System.out.println("Hola Mundo");
-		System.out.println("Soy Fatima Fiallos");
-		System.out.println("----------------");
-		System.out.println("Cambio en una nueva rama taller3");
-		System.out.println("Cambio en una nueva rama taller4v2");
-		
+		this.estudiante.setNombre("Fatima");
+		this.estudiante.setApellido("Fiallos");
+		this.estudiante.setCedula("1753341344");
+		this.estudiante.setSalario(new BigDecimal(100));
+		System.out.println(estudiante);
 	}
 
 }
