@@ -11,15 +11,17 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.uce.edu.ioc.di.Estudiante;
 import com.uce.edu.repository.modelo.Materia;
 import com.uce.edu.service.IMateriaService;
+import com.uce.edu.transferencia.repository.modelo.CuentaBancaria;
+import com.uce.edu.transferencia.service.ICuentaBancariaService;
+import com.uce.edu.transferencia.service.ITransferenciaService;
 
 @SpringBootApplication
 public class Pa2U1P5FfApplication implements CommandLineRunner {
 	
 	@Autowired
-	private IMateriaService iMateriaService;
-	
+	private ITransferenciaService iTransferenciaService;
 	@Autowired
-	private Materia materia;
+	private ICuentaBancariaService iCuentaBancariaService;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(Pa2U1P5FfApplication.class, args);
@@ -27,37 +29,30 @@ public class Pa2U1P5FfApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		this.materia.setCodigo("M1");
-		this.materia.setNombre("P. Avanzada");
-		this.materia.setNumeroCreditos(10);
 		
-		this.iMateriaService.registrar(materia);
+		//1. Crear las cuentas
+		CuentaBancaria ctaOrigen = new CuentaBancaria();
+		ctaOrigen.setCedulaPropietario("1753341344");
+		ctaOrigen.setNumero("1234");
+		ctaOrigen.setSaldo(new BigDecimal(100));
+		this.iCuentaBancariaService.guardar(ctaOrigen);
 		
-		System.out.println("Reporte inicio");
+		CuentaBancaria ctaDestino = new CuentaBancaria();
+		ctaDestino.setCedulaPropietario("1753341333");
+		ctaDestino.setNumero("5678");
+		ctaDestino.setSaldo(new BigDecimal(200));
+		this.iCuentaBancariaService.guardar(ctaDestino);
 		
-		List<Materia> reporte = this.iMateriaService.buscarTodo();
-		for(Materia mat: reporte) {
-			System.out.println(mat);
-		}
+		this.iTransferenciaService.realizar("1234", "5678", new BigDecimal(20));
+		System.out.println(ctaOrigen);
+		System.out.println(ctaDestino);
 		
-		System.out.println("Reporte fin");
-
+		/*CuentaBancaria ctaOrigen1 = this.iCuentaBancariaService.buscar("1234");
+		System.out.println(ctaOrigen1);
 		
-		Materia mate= this.iMateriaService.buscar("M1");
-		System.out.println(mate);
-		
-		mate.setNumeroCreditos(20);
-		
-		this.iMateriaService.actualizar(mate);
-		Materia mate2= this.iMateriaService.buscar("M1");
-		System.out.println(mate2);
-		
-		this.iMateriaService.eliminar("M1");
-		
-		mate2= this.iMateriaService.buscar("M1");
-		System.out.println(mate2);
-
-
+		CuentaBancaria ctaDestino1 = this.iCuentaBancariaService.buscar("5678");
+		System.out.println(ctaDestino1);
+*/
 	}
 
 }
