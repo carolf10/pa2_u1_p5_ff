@@ -8,10 +8,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.uce.edu.ioc.di.Estudiante;
-import com.uce.edu.repository.modelo.Materia;
-import com.uce.edu.service.IMateriaService;
 import com.uce.edu.transferencia.repository.modelo.CuentaBancaria;
+import com.uce.edu.transferencia.repository.modelo.Transferencia;
 import com.uce.edu.transferencia.service.ICuentaBancariaService;
 import com.uce.edu.transferencia.service.ITransferenciaService;
 
@@ -44,15 +42,16 @@ public class Pa2U1P5FfApplication implements CommandLineRunner {
 		this.iCuentaBancariaService.guardar(ctaDestino);
 		
 		this.iTransferenciaService.realizar("1234", "5678", new BigDecimal(20));
-		System.out.println(ctaOrigen);
-		System.out.println(ctaDestino);
+		this.iTransferenciaService.realizar("5678","1234", new BigDecimal(50));
+		this.iTransferenciaService.realizar("1234","5678", new BigDecimal(10));
 		
-		/*CuentaBancaria ctaOrigen1 = this.iCuentaBancariaService.buscar("1234");
-		System.out.println(ctaOrigen1);
-		
-		CuentaBancaria ctaDestino1 = this.iCuentaBancariaService.buscar("5678");
-		System.out.println(ctaDestino1);
-*/
+		System.out.println("Contador");
+
+		List<Transferencia> lista = this.iTransferenciaService.visulizarTodoList();
+		for(Transferencia trans: lista) {
+			System.out.println("Transferencia "+trans.toString());
+		}
+
 	}
 
 }

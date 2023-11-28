@@ -2,6 +2,7 @@ package com.uce.edu.transferencia.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,8 @@ public class TransferenciaServiceImpl implements ITransferenciaService {
 	private ITransferenciaRepository iTransferenciaRepository;
 	@Autowired
 	private ICuentaBancariaRepository iCuentaBancariaRepository;
-
+	@Autowired
+	private INumeracionTransferenciaService iNumeracionTransferenciaService; 
 	@Override
 	public Transferencia buscar(String numero) {
 		// TODO Auto-generated method stub
@@ -67,12 +69,13 @@ public class TransferenciaServiceImpl implements ITransferenciaService {
 			this.iCuentaBancariaRepository.actualizar(ctaDestino);
 		
 			//10. Crear Transferencia
+			String num = this.iNumeracionTransferenciaService.establecerContador();
 			Transferencia transferencia = new Transferencia();
 			transferencia.setCuentaOrigen(cuentaOrigen);
 			transferencia.setCuentaDestino(ctaDestino);
 			transferencia.setFecha(LocalDateTime.now());
 			transferencia.setMonto(monto);
-			transferencia.setNumero("12312313");
+			transferencia.setNumero(num);
 			
 			this.iTransferenciaRepository.insertar(transferencia);
 			System.out.println("Transferencia realizada con Exito!");
@@ -82,6 +85,12 @@ public class TransferenciaServiceImpl implements ITransferenciaService {
 		}
 		
 		
+	}
+
+	@Override
+	public List<Transferencia> visulizarTodoList() {
+		// TODO Auto-generated method stub
+		return this.iTransferenciaRepository.selecionarTodo();
 	}
 
 }
