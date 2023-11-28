@@ -27,11 +27,19 @@ public class CuentaBancariaRepositoryImpl implements ICuentaBancariaRepository {
 		}
 		return null;
 	}
+	
+	public CuentaBancaria seleccionarEliminar(String numero) {
+		for(CuentaBancaria cuenta:base) {
+			if(cuenta.getNumero().equals(numero)) {
+				return cuenta;
+			}
+		}
+		return null;
+	}
 
 	@Override
 	public void insertar(CuentaBancaria cuentaBancaria) {
 		base.add(cuentaBancaria);
-
 	}
 
 	@Override
@@ -42,7 +50,7 @@ public class CuentaBancariaRepositoryImpl implements ICuentaBancariaRepository {
 
 	@Override
 	public void eliminar(String numero) {
-		CuentaBancaria cuenta = this.seleccionar(numero);
+		CuentaBancaria cuenta = this.seleccionarEliminar(numero);
 		base.remove(cuenta);
 	}
 

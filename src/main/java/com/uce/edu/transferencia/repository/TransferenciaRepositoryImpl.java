@@ -40,7 +40,14 @@ public class TransferenciaRepositoryImpl implements ITransferenciaRepository {
 	public void eliminar(String numero) {
 		Transferencia transfer = this.seleccionar(numero);
 		base.remove(transfer);
-
 	}
+
+	@Override
+	public List<Transferencia> seleccionarTodos() {
+		// TODO Auto-generated method stub
+		return base;
+	}
+	
+	
 
 }

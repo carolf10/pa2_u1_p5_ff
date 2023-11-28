@@ -2,6 +2,7 @@ package com.uce.edu.transferencia.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,6 +48,7 @@ public class TransferenciaServiceImpl implements ITransferenciaService {
 		// TODO Auto-generated method stub
 		//1. Buscar Cta Origen 
 		CuentaBancaria cuentaOrigen=this.iCuentaBancariaRepository.seleccionar(numeroOrigen);
+		System.out.println(cuentaOrigen.hashCode());
 		//2. Consultar el saldo
 		BigDecimal salBigDecimal = cuentaOrigen.getSaldo();
 		//3. Validar Saldo
@@ -58,6 +60,7 @@ public class TransferenciaServiceImpl implements ITransferenciaService {
 			this.iCuentaBancariaRepository.actualizar(cuentaOrigen);
 			//6. Buscar Cta Destino
 			CuentaBancaria ctaDestino = this.iCuentaBancariaRepository.seleccionar(numeroDestinp);
+			System.out.println(ctaDestino.hashCode());
 			//7. Consultar Saldo
 			BigDecimal saldoDestino = ctaDestino.getSaldo();
 			//8. Sumar el monto
@@ -79,9 +82,25 @@ public class TransferenciaServiceImpl implements ITransferenciaService {
 			
 		} else {
 			System.out.println("Saldo no disponible");
-		}
+		}	
+	}
+
+	@Override
+	public List<Transferencia> buscarTodos() {
+		// TODO Auto-generated method stub
+		return this.iTransferenciaRepository.seleccionarTodos();
+	}
+
+	@Override
+	public void depositar(String numeroOrigen, BigDecimal monto) {
+		BigDecimal descuento = new BigDecimal(0.1);
+		BigDecimal restar = monto.multiply(descuento);
+		BigDecimal montoFinal = monto.subtract(restar);
+		//CuentaBancaria ctaTemp= this.buscar(numeroOrigen);
 		
 		
 	}
+
+	
 
 }
