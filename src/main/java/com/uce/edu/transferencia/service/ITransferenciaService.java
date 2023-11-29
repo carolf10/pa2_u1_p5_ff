@@ -19,7 +19,5 @@ public interface ITransferenciaService {
 	public void realizar(String numeroOrigen, String numeroDestinp, BigDecimal monto);
 
 	public List <Transferencia> buscarTodos () ;
-	
-	public void depositar(String numeroOrigen, BigDecimal monto);
 
 }

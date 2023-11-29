@@ -18,6 +18,8 @@ public class TransferenciaServiceImpl implements ITransferenciaService {
 	private ITransferenciaRepository iTransferenciaRepository;
 	@Autowired
 	private ICuentaBancariaRepository iCuentaBancariaRepository;
+	@Autowired
+	private ICuentaBancariaService iCuentaBancariaService;
 
 	@Override
 	public Transferencia buscar(String numero) {
@@ -68,6 +70,9 @@ public class TransferenciaServiceImpl implements ITransferenciaService {
 			//9. Actualizar Cta Destino
 			ctaDestino.setSaldo(nuevoSaldoDestino);
 			this.iCuentaBancariaRepository.actualizar(ctaDestino);
+			
+			//se usa aqui la inyeccion
+			this.iCuentaBancariaService.depositar(numeroDestinp, monto);
 		
 			//10. Crear Transferencia
 			Transferencia transferencia = new Transferencia();
@@ -91,15 +96,6 @@ public class TransferenciaServiceImpl implements ITransferenciaService {
 		return this.iTransferenciaRepository.seleccionarTodos();
 	}
 
-	@Override
-	public void depositar(String numeroOrigen, BigDecimal monto) {
-		BigDecimal descuento = new BigDecimal(0.1);
-		BigDecimal restar = monto.multiply(descuento);
-		BigDecimal montoFinal = monto.subtract(restar);
-		//CuentaBancaria ctaTemp= this.buscar(numeroOrigen);
-		
-		
-	}
 
 	
 
