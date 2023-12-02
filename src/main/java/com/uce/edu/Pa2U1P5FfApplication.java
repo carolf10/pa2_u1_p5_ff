@@ -1,43 +1,30 @@
 package com.uce.edu;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.uce.edu.ioc.di.Estudiante;
-import com.uce.edu.repository.modelo.Materia;
-import com.uce.edu.service.IMateriaService;
-import com.uce.edu.transferencia.repository.modelo.CuentaBancaria;
-import com.uce.edu.transferencia.repository.modelo.Transferencia;
-import com.uce.edu.transferencia.service.ICuentaBancariaService;
-import com.uce.edu.transferencia.service.ITransferenciaService;
+import com.uce.edu.inventario.repository.IInventarioRepository;
+import com.uce.edu.inventario.repository.modelo.Bodega;
+import com.uce.edu.inventario.repository.modelo.Inventario;
+import com.uce.edu.inventario.repository.modelo.Producto;
+import com.uce.edu.inventario.service.IBodegaService;
+import com.uce.edu.inventario.service.IInventarioService;
+import com.uce.edu.inventario.service.IProductoService;
 
 @SpringBootApplication
 public class Pa2U1P5FfApplication implements CommandLineRunner {
 	
 	@Autowired //por atributo
-	private ITransferenciaService iTransferenciaService;
+	private IProductoService iProductoService;
 	
-	/* DI por constructor
-	private ITransferenciaService iTransferenciaService;
-	@Autowired 
-	public Pa2U1P5FfApplication(ITransferenciaService iTransferenciaService) {
-		this.iTransferenciaService= iTransferenciaService;
-	}*/
+	@Autowired
+	private IBodegaService iBodegaService;
 	
-	/*DI por metodo (set)
 	@Autowired
-	public void setiTransferenciaService(ITransferenciaService iTransferenciaService) {
-		this.iTransferenciaService = iTransferenciaService;
-	}*/
-
-	@Autowired
-	private ICuentaBancariaService iCuentaBancariaService;
+	private IInventarioService iInventarioService;
+	
 	
 	public static void main(String[] args) {
 		SpringApplication.run(Pa2U1P5FfApplication.class, args);
@@ -45,43 +32,34 @@ public class Pa2U1P5FfApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
+		Producto p1 = new Producto();
+		p1.setCodigoBarras("123456");
+		p1.setNombre("HP 15 laptop");
+		p1.setStock(0);
 		
-		List<Transferencia> lista = new ArrayList<>();
+		this.iProductoService.guardar(p1);
 		
-		//1. Crear las cuentas
-		CuentaBancaria ctaOrigen = new CuentaBancaria();
-		ctaOrigen.setCedulaPropietario("1753341344");
-		ctaOrigen.setNumero("1234");
-		ctaOrigen.setSaldo(new BigDecimal(100));
-		this.iCuentaBancariaService.guardar(ctaOrigen);
+		Producto p2 = new Producto();
+		p2.setCodigoBarras("546515646");
+		p2.setNombre("Teclado HP ");
+		p2.setStock(0);
 		
-		CuentaBancaria ctaDestino = new CuentaBancaria();
-		ctaDestino.setCedulaPropietario("1753341333");
-		ctaDestino.setNumero("5678");
-		ctaDestino.setSaldo(new BigDecimal(200));
-		this.iCuentaBancariaService.guardar(ctaDestino);
+		this.iProductoService.guardar(p2);
 		
-		this.iTransferenciaService.realizar("1234", "5678", new BigDecimal(30));
-		//System.out.println(ctaOrigen.hashCode());
-		//System.out.println(ctaDestino.hashCode());
+		Bodega b1 = new Bodega();
+		b1.setCapacidad(12);
+		b1.setCodigo("232366");
+		b1.setDireccion("Sector Alma Lojana");
+		b1.setNombre("Bodega 1");
 		
-		CuentaBancaria ctaOrigen1 = this.iCuentaBancariaService.buscar("1234");
-		System.out.println(ctaOrigen1);
+		this.iBodegaService.guardar(b1);
 		
-		CuentaBancaria ctaDestino1 = this.iCuentaBancariaService.buscar("5678");
-		System.out.println(ctaDestino1);
+		this.iInventarioService.registrar("232366", "123456", 50);
+		this.iInventarioService.registrar("232366", "546515646", 100);
+		this.iInventarioService.registrar("232366", "123456", 20);
 		
-		this.iTransferenciaService.realizar("1234", "5678", new BigDecimal(50));
-		this.iTransferenciaService.realizar("5678", "1234", new BigDecimal(10));
-		
-		//Constrir un reporte del estado de cuenta de todas las transferencias
-		int indice=0;
-		for(Transferencia trans: lista) {
-			
-			indice++;
-			System.out.println(indice + " : " + trans.toString());
-		}
-
+		System.out.println(this.iProductoService.buscar("123456"));
+		System.out.println(this.iProductoService.buscar("546515646"));
 		
 	}
 
